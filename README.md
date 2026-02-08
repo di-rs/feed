@@ -1,9 +1,14 @@
-# Feed Reader
+# Feed
 
-A minimal, fast feed reader built with Astro, TypeScript, and Tailwind CSS. Features dark/light mode, date-based navigation, and tag filtering.
+> **Automated RSS feed aggregator with AI-powered summaries**
+
+A minimal, fast feed reader that automatically collects articles from curated RSS feeds, generates AI summaries, and presents them in a clean, searchable interface. Built with Astro, TypeScript, and Tailwind CSS.
+
+🔗 **Live:** [feed.dimaportish.com](https://feed.dimaportish.com)
 
 ## 🚀 Features
 
+- **Automated Content** - Hourly RSS feed scanning with AI-generated summaries and tags
 - **Static Site Generation** - Fast page loads with pre-rendered HTML
 - **Content Collections** - Type-safe frontmatter with Astro's content collections
 - **Date Pagination** - Navigate between dates with previous/next controls
@@ -12,6 +17,18 @@ A minimal, fast feed reader built with Astro, TypeScript, and Tailwind CSS. Feat
 - **Dark/Light Mode** - Theme switcher with system preference detection
 - **Responsive Design** - Mobile-friendly layout
 - **PP Neue Montreal Mono** - Custom typography from di-rs
+
+## 🤖 How It Works
+
+1. **RSS Scanning** - A cron job checks curated frontend/tech RSS feeds every hour
+2. **AI Processing** - For each new article:
+   - Fetches full content
+   - Generates a 2-3 sentence TL;DR summary
+   - Extracts or generates 3-6 relevant tags
+   - Pulls featured image (if available)
+3. **Auto-Publishing** - Creates markdown files in `src/content/posts/{date}/{slug}.md`
+4. **Auto-Deploy** - Commits and pushes to GitHub, triggering Cloudflare Pages rebuild
+5. **Static Site** - Pre-rendered HTML served globally via Cloudflare's CDN
 
 ## 📁 Project Structure
 
@@ -140,10 +157,22 @@ Edit `src/styles/global.css` to customize the color scheme. The site uses Tailwi
 - Minimal JavaScript (only for theme toggle and filtering)
 - Optimized fonts with woff2 format and font-display: swap
 
+## 📡 RSS Sources
+
+Currently tracking frontend and web development blogs including:
+- Cloudflare Blog
+- Vercel Blog
+- TypeScript Blog
+- React Blog
+- Vue.js Blog
+- And more...
+
+Powered by [blogwatcher](https://github.com/Hyaxia/blogwatcher) CLI.
+
 ## 🤝 Contributing
 
-This is a personal feed reader. Posts are generated automatically by a separate cron job.
+This is a personal feed reader. Posts are generated automatically by a cron job running on my machine. Feel free to fork and adapt for your own feeds!
 
 ## 📄 License
 
-MIT
+[MIT](LICENSE) - Feel free to use this for your own feed reader!

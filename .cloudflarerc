@@ -1,0 +1,11 @@
+{
+  "pages": {
+    "build": {
+      "command": "npm run build",
+      "output": "dist"
+    },
+    "site": {
+      "name": "feed"
+    }
+  }
+}

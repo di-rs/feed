@@ -1,0 +1,323 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+
+// Get all posts and sort by date (newest first)
+const allPosts = await getCollection('posts');
+const sortedPosts = allPosts.sort((a, b) => {
+  const dateA = new Date(a.data.date + 'T' + a.data.time);
+  const dateB = new Date(b.data.date + 'T' + b.data.time);
+  return dateB.getTime() - dateA.getTime();
+});
+
+// Get unique dates for pagination
+const uniqueDates = [...new Set(sortedPosts.map(post => post.data.date))];
+
+// Get all unique tags
+const allTags = [...new Set(sortedPosts.flatMap(post => post.data.tags))].sort();
+
+// Format date for display
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', { 
+    month: 'short', 
+    day: 'numeric', 
+    year: 'numeric' 
+  });
+}
+---
+
+<Layout title="Feed Reader">
+  <ThemeToggle />
+  
+  <div class="max-w-6xl mx-auto px-4 py-8 md:py-12">
+    <!-- Header -->
+    <header class="mb-8">
+      <h1 class="text-3xl md:text-4xl font-bold mb-2">Feed</h1>
+      <p class="text-gray-600 dark:text-gray-400">Your daily reading list</p>
+    </header>
+
+    <!-- Date Navigation -->
+    <div id="date-nav" class="mb-8 flex items-center gap-2 flex-wrap">
+      <button 
+        id="prev-date" 
+        class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        aria-label="Previous date"
+      >
+        ←
+      </button>
+      
+      <div id="date-buttons-container" class="flex gap-2 flex-wrap flex-1">
+        {uniqueDates.slice(0, 7).map(date => (
+          <button 
+            class="date-btn px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors data-[active=true]:bg-black data-[active=true]:text-white dark:data-[active=true]:bg-white dark:data-[active=true]:text-black"
+            data-date={date}
+          >
+            {formatDate(date)}
+          </button>
+        ))}
+      </div>
+      
+      <button 
+        id="next-date" 
+        class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        aria-label="Next date"
+      >
+        →
+      </button>
+    </div>
+
+    <!-- Tag Filter -->
+    <div class="mb-8">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Filter by tag:</span>
+        <button 
+          id="clear-tags" 
+          class="text-sm px-3 py-1 rounded-lg bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors hidden"
+        >
+          Clear all
+        </button>
+      </div>
+      <div class="flex gap-2 flex-wrap">
+        {allTags.map(tag => (
+          <button 
+            class="tag-btn px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors data-[active=true]:bg-black data-[active=true]:text-white dark:data-[active=true]:bg-white dark:data-[active=true]:text-black text-sm"
+            data-tag={tag}
+          >
+            {tag}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Posts Grid -->
+    <div id="posts-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {sortedPosts.map(async (post) => {
+        const { Content } = await post.render();
+        return (
+          <article 
+            class="post-card border border-gray-200 dark:border-gray-800 rounded-lg p-6 hover:border-gray-300 dark:hover:border-gray-700 transition-colors"
+            data-date={post.data.date}
+            data-tags={JSON.stringify(post.data.tags)}
+          >
+            {post.data.image && (
+              <img 
+                src={post.data.image} 
+                alt={post.data.title}
+                class="w-full h-48 object-cover rounded-lg mb-4"
+                loading="lazy"
+              />
+            )}
+            
+            <div class="flex items-center gap-2 mb-3 text-sm text-gray-600 dark:text-gray-400">
+              <span class="font-medium">{post.data.source}</span>
+              <span>•</span>
+              <time datetime={post.data.date}>{formatDate(post.data.date)}</time>
+              <span>•</span>
+              <span>{post.data.time}</span>
+            </div>
+            
+            <h2 class="text-xl font-bold mb-3">
+              <a 
+                href={post.data.link} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="hover:underline"
+              >
+                {post.data.title}
+              </a>
+            </h2>
+            
+            <div class="prose prose-sm dark:prose-invert mb-4">
+              <Content />
+            </div>
+            
+            <div class="flex gap-2 flex-wrap">
+              {post.data.tags.map(tag => (
+                <button 
+                  class="post-tag px-2 py-1 text-xs rounded bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+                  data-tag={tag}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+
+  <script define:vars={{ uniqueDates }}>
+    let currentDateIndex = 0;
+    let activeTags = new Set();
+    let availableDates = [...uniqueDates];
+
+    // Get posts that match current tag filter
+    function getFilteredPosts() {
+      const posts = document.querySelectorAll('.post-card');
+      const filtered = [];
+      
+      posts.forEach(post => {
+        const postTagsStr = post.getAttribute('data-tags');
+        const postTags = postTagsStr ? JSON.parse(postTagsStr) : [];
+        const tagMatch = activeTags.size === 0 || postTags.some(tag => activeTags.has(tag));
+        
+        if (tagMatch) {
+          filtered.push(post);
+        }
+      });
+      
+      return filtered;
+    }
+
+    // Get dates that have posts matching the tag filter
+    function getAvailableDates() {
+      const filteredPosts = getFilteredPosts();
+      const dates = new Set();
+      
+      filteredPosts.forEach(post => {
+        const date = post.getAttribute('data-date');
+        if (date) dates.add(date);
+      });
+      
+      // Return dates in original order
+      return uniqueDates.filter(date => dates.has(date));
+    }
+
+    // Update available dates and current index
+    function updateAvailableDates() {
+      const oldDate = availableDates[currentDateIndex];
+      availableDates = activeTags.size === 0 ? [...uniqueDates] : getAvailableDates();
+      
+      // Try to maintain current date if it's still available
+      const newIndex = availableDates.indexOf(oldDate);
+      if (newIndex !== -1) {
+        currentDateIndex = newIndex;
+      } else {
+        // If current date is no longer available, go to first available date
+        currentDateIndex = 0;
+      }
+      
+      updateDateNav();
+    }
+
+    // Render date buttons
+    function renderDateButtons() {
+      const container = document.getElementById('date-buttons-container');
+      if (!container) return;
+      
+      container.innerHTML = '';
+      
+      availableDates.slice(0, 7).forEach((date, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'date-btn px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors data-[active=true]:bg-black data-[active=true]:text-white dark:data-[active=true]:bg-white dark:data-[active=true]:text-black';
+        btn.setAttribute('data-date', date);
+        btn.setAttribute('data-active', (index === currentDateIndex).toString());
+        
+        // Format date
+        const dateObj = new Date(date);
+        btn.textContent = dateObj.toLocaleDateString('en-US', { 
+          month: 'short', 
+          day: 'numeric', 
+          year: 'numeric' 
+        });
+        
+        btn.addEventListener('click', () => {
+          currentDateIndex = index;
+          updateDateNav();
+        });
+        
+        container.appendChild(btn);
+      });
+    }
+
+    // Date navigation
+    function updateDateNav() {
+      renderDateButtons();
+      
+      const prevBtn = document.getElementById('prev-date');
+      const nextBtn = document.getElementById('next-date');
+      
+      if (prevBtn) prevBtn.disabled = currentDateIndex === availableDates.length - 1;
+      if (nextBtn) nextBtn.disabled = currentDateIndex === 0;
+      
+      filterPosts();
+    }
+
+    // Tag filtering
+    function updateTagFilter() {
+      const tagBtns = document.querySelectorAll('.tag-btn');
+      tagBtns.forEach(btn => {
+        const tag = btn.getAttribute('data-tag');
+        btn.setAttribute('data-active', (tag && activeTags.has(tag)).toString());
+      });
+      
+      const clearBtn = document.getElementById('clear-tags');
+      if (clearBtn) {
+        clearBtn.classList.toggle('hidden', activeTags.size === 0);
+      }
+      
+      updateAvailableDates();
+    }
+
+    // Filter posts based on date and tags
+    function filterPosts() {
+      const currentDate = availableDates[currentDateIndex];
+      const posts = document.querySelectorAll('.post-card');
+      
+      posts.forEach(post => {
+        const postDate = post.getAttribute('data-date');
+        const postTagsStr = post.getAttribute('data-tags');
+        const postTags = postTagsStr ? JSON.parse(postTagsStr) : [];
+        
+        const dateMatch = !currentDate || postDate === currentDate;
+        const tagMatch = activeTags.size === 0 || postTags.some(tag => activeTags.has(tag));
+        
+        if (dateMatch && tagMatch) {
+          post.style.display = '';
+        } else {
+          post.style.display = 'none';
+        }
+      });
+    }
+
+    // Event listeners
+    document.getElementById('prev-date')?.addEventListener('click', () => {
+      if (currentDateIndex < availableDates.length - 1) {
+        currentDateIndex++;
+        updateDateNav();
+      }
+    });
+
+    document.getElementById('next-date')?.addEventListener('click', () => {
+      if (currentDateIndex > 0) {
+        currentDateIndex--;
+        updateDateNav();
+      }
+    });
+
+    document.querySelectorAll('.tag-btn, .post-tag').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tag = btn.getAttribute('data-tag');
+        if (tag) {
+          if (activeTags.has(tag)) {
+            activeTags.delete(tag);
+          } else {
+            activeTags.add(tag);
+          }
+          updateTagFilter();
+        }
+      });
+    });
+
+    document.getElementById('clear-tags')?.addEventListener('click', () => {
+      activeTags.clear();
+      updateTagFilter();
+    });
+
+    // Initialize
+    updateDateNav();
+  </script>
+</Layout>

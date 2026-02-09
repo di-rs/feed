@@ -1,0 +1,11 @@
+---
+title: "Why C++ Never Ran the Web: The $0.00 Secret of JavaScript's Success"
+date: "2026-02-09"
+time: "00:00"
+source: "DEV Community"
+link: "https://dev.to/aabiskar/why-c-never-ran-the-web-the-000-secret-of-javascripts-success-1l4m"
+image: "https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Flh3.googleusercontent.com%2Frd-gg-dl%2FAOI_d_-1edSCaNhCPtgpjV1bMQ6KpJU3cIErszb6ssAZr5i_80RhXn807_qBtv836cFo6tFl4qjZxMNP3fQEam6QrYmyPB3ii-Vn0iprZnBAVO8eEHe7eWL7zMMOwl7e_SrX8k-P0NhWE1hweNj2pEwHyz5qKN8DeUzL50bfCwa50h1D2zBAZqLp4-fL4eUOewi7_zSFrn_jOC4ps4Afkt1hBKMjMpjyGGpDZ4f9i7N4-bTbQkmPXnveIdRrzZ9nQR28ZBZzy0uIBzSEoGky7TdfSTSHsGBK-Fspz_vuLFjLyHNLJseNJFbiEzBe5SXweQeQHeSNTALTbxnmdd_NpzISWloZDs24QNbaf5FhgokloysWzlA00b7H0WJBfEaNL-2wPTUo3HH1_L7Hn9t6ia1Ftq80r4mBaW1CTpLAHCE0KZAmD0nuV--gpbxeWjMlgD3kmhiEfzkJPdjpuS8Mue4aqYY1FDaKcw-2BOMT_Xz8T0Lifrw2ui5wCRLHyfV1aEFlDWE-XcR570icKLTeZtU-05OAQxHnP9k7Z5Mg76SBrA0GEtXR50wS4Wit2ptiGT65wZzDRRT3t4HB9qqLYQq2yRmI0lQvUj0KTEHYrHRF4Add3GNu5OpCSKjKCzbRyG4WnJsrWq8Bn8j3dNJNvUh159VTKPhf8yGIVR-xBQ0yhOhJMbrtXydFicgosb1_awuW4O6J5Cte3U-hSps9g_uMta16gDiFqI9VlrSYmzUVPP_hawYe5XYoMVuvg9lIGI01M-DCKZAP6PeAWI1LwJuX4htlIiZ3YKbd1LuoaykbVXz92J390ixMqZzohXgHUohwpNjRyXInFiNqgEfHBp14PbwQXOHnVuEiZ_Z-AgqdjB0y7RgKWnU31Sm21d38GYWAJYwlV1yv6Ivxs0uWPNVp2w3euBQLzed4AXZPWeGLPKsRe2xAE8ijdq_hZpCi9bR_CNzeAedcoVleP8UzcP2CbO40TPSHWTrCBhhnIHtBlrZ9oXq3jXzTzn7ZAnRKs-xkXs20ECw9p6kkwDHG5YOaxu6D-iUBBUysAVSmPWA88liRiweDzUKwPiHdCV7XOTxYYjdAsCYy_3EROf_05_LgCLAxxw-6rKbN02djpPL51nB-2InXn9upMtvPblSHSndhXornUs1t99Fkf4u5n0DRc2k5Kz7Y_vwMW4i59VAyd8XO34HS1KeNbHa0H6tiBXn-A9-JCHL-yJCk92esh47YXh-yfpUaUjolhUIyJbKeKVaX-KlDN0NP6pxyw3wSadBhIdAuWCz0SHuJYsIqiif-xSJHJAVwrPuDFUoigSKPe1-rRKNfRPp8DN7uEwVKXC5gLZd6S_Sgexct4GlQXR5bXXC9uzwboW-kxCpVFY7nYNgtMHQL5ZOPHUeEMzu2A-qnO5cC-M6pRGc%3Ds1024-rj"
+tags: [javascript, history, web, security, cpp, webdev]
+---
+
+Explores why JavaScript became the web's dominant language over C++ despite being less powerful. JavaScript's sandbox security, lightweight footprint, and developer accessibility made it ideal for the resource-constrained early web, while C++'s power posed security risks and performance challenges for 1995 hardware.

@@ -1,5 +1,5 @@
 ---
-title: "The Mechanics of Good Object "immutable proxy that animate data""
+title: "The Mechanics of Good Object immutable proxy that animate data"
 date: "2026-02-08"
 time: "00:00"
 source: "DEV Community"

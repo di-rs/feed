@@ -1,11 +1,11 @@
 ---
 title: Running a Low Power AI Server 24/7 — My Setup Under 15W
 date: 2026-02-10
-time: "00:00"
+time: 00:00
 source: DEV Community
-link: https://dev.to/yankoaleksandrov/running-a-low-power-ai-server-247-my-setup-under-15w-kgb
+link: https://dev.to/yankoaleksandrov/running-a-low-power-ai-server-247-my-setup-under-15w-47m3
 image: ""
-tags: [ai, self-hosted, hardware, power-efficiency, jetson, openclaw]
+tags: [ai, home-server, low-power, jetson, self-hosted, energy-efficiency]
 ---
 
-A practical breakdown of running an always-on personal AI assistant server under 15W using an NVIDIA Jetson Orin Nano (ClawBox). The author compares electricity costs across devices — from Raspberry Pi 5 (€0.90-1.44/month) to GPU desktops (€30+/month) — and explains why the Jetson's 67 TOPS of AI compute, fanless passive cooling, and under €3/month power cost make it ideal for 24/7 AI workloads.
+A detailed breakdown of running a personal AI assistant 24/7 on a ClawBox (NVIDIA Jetson Orin Nano) drawing only 12–15W — handling Telegram automation, browser tasks, calendar management, and local AI inference for under €3/month in electricity. The post compares power draw across devices (Pi 5 at 5–8W, Jetson at 15W, Intel N100 at 25W, Mac Mini M4 at idle) and argues that the Jetson hits the sweet spot of low power consumption with enough GPU compute (67 TOPS) to run real local AI models, unlike the Pi which can't.
